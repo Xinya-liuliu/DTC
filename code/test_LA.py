@@ -6,7 +6,8 @@ from test_util import test_all_case
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='../data/2018LA_Seg_Training Set', help='Name of Experiment')
+                    default='/home/data/Liuxy/LXY_github/DTC/data/2018LA_Seg_Training Set', help='Name of Experiment')
+                    # default='../data/2018LA_Seg_Training Set', help='Name of Experiment')
 parser.add_argument('--model', type=str,
                     default='DTC_16labels', help='model_name')
 parser.add_argument('--gpu', type=str,  default='1', help='GPU to use')
@@ -18,8 +19,10 @@ parser.add_argument('--nms', type=int, default=1,
 
 FLAGS = parser.parse_args()
 
+# os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
-snapshot_path = "../model/{}".format(FLAGS.model)
+snapshot_path = "/home/data/Liuxy/LXY_github/DTC/model/{}".format(FLAGS.model)
+# snapshot_path = "../model/{}".format(FLAGS.model)
 
 num_classes = 2
 
@@ -37,7 +40,8 @@ def test_calculate_metric():
     net = VNet(n_channels=1, n_classes=num_classes-1,
                normalization='batchnorm', has_dropout=False).cuda()
     save_mode_path = os.path.join(
-        snapshot_path, 'best_model.pth')
+        snapshot_path, 'dtc_16_aaai2021.pth')
+        # snapshot_path, 'best_model.pth')
     net.load_state_dict(torch.load(save_mode_path))
     print("init weight from {}".format(save_mode_path))
     net.eval()
